@@ -156,7 +156,7 @@ def grailsFunctionalTest(def browserSpec) {
     finalizedBy 'closeSauceTunnel'
   }
   functionalTests.dependsOn "grailsFuncTest_${name}"
-  grailsFunctionalServerPort++
+//  grailsFunctionalServerPort++
 }
 
 def browsers = [
