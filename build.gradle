@@ -71,7 +71,7 @@ dependencies {
   // This is marked as provided in the pom for some reason
   sauceConnect "commons-io:commons-io:1.4"
 
-  test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
+//  test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
   test "org.gebish:geb-spock:$gebVersion"
   test "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
   test "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
@@ -82,7 +82,7 @@ dependencies {
   }
 
   // plugins for the build system only
-  bootstrap "org.grails.plugins:tomcat:7.0.55"
+//  bootstrap "org.grails.plugins:tomcat:7.0.55"
 
   // plugins for the compile step
   compile "org.grails.plugins:scaffolding:2.1.2"
@@ -90,18 +90,18 @@ dependencies {
   compile "org.grails.plugins:asset-pipeline:1.9.9"
 
   // plugins needed at runtime but not for compilation
-  runtime("org.grails.plugins:hibernate4:4.3.5.5") { // or ":hibernate:3.6.10.17"
-    exclude module: 'xml-apis'
-  }
-  runtime "org.grails.plugins:database-migration:1.4.0"
-  runtime "org.grails.plugins:jquery:1.11.1"
+//  runtime("org.grails.plugins:hibernate4:4.3.5.5") { // or ":hibernate:3.6.10.17"
+//    exclude module: 'xml-apis'
+//  }
+//  runtime "org.grails.plugins:database-migration:1.4.0"
+//  runtime "org.grails.plugins:jquery:1.11.1"
 
   test "org.grails.plugins:geb:$gebVersion"
   test "org.grails.plugins:geb-saucelabs:0.1"
-  test("org.grails.plugins:code-coverage:2.0.3-2") {
-    exclude module: 'xml-apis'
-    exclude group: 'xerces'
-  }
+//  test("org.grails.plugins:code-coverage:2.0.3-2") {
+//    exclude module: 'xml-apis'
+//    exclude group: 'xerces'
+//  }
 }
 
 sauceLabs {
@@ -127,26 +127,31 @@ task functionalTests {
  * Create a new Grails functional test for the specified browser.
  * @param browserSpec map of properties sent to Sauce Labs
  */
-ext {
-  grailsFunctionalServerPort = 8080
-}
+
+//ext {
+//  grailsFunctionalServerPort = 8080
+//}
+
 def grailsFunctionalTest(def browserSpec) {
+
   def browser = browserSpec.collect { key, value -> "${key}=${value}" }.join(',')
   def name = browserSpec.collect { key, value -> value }.join('_').replaceAll(/\s+/, '')
   def output = "target/test-reports/geb/${name}"
 
   task "grailsFuncTest_${name}"(type: GrailsTestTask) {
     group "Sauce Test"
+
     testResultsDir = file(output)
     phases = ['functional:']
     jvmOptions.with {
-      systemProperty "grails.nofork", "true"
+//      systemProperty "grails.nofork", "true"
       systemProperty "geb.saucelabs.browser", browser
       systemProperty "geb.build.reportsDir", output
-      systemProperty "grails.server.port", grailsFunctionalServerPort
-      systemProperty "server.port", grailsFunctionalServerPort
-      systemProperty "grails.server.host", hostname
+//      systemProperty "grails.server.port", grailsFunctionalServerPort
+//      systemProperty "server.port", grailsFunctionalServerPort
+//      systemProperty "grails.server.host", hostname
     }
+    
     dependsOn 'openSauceTunnelInBackground'
     finalizedBy 'closeSauceTunnel'
   }
