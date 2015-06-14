@@ -1,7 +1,7 @@
-package me.doublepage
+package me.pdouble.page
 
 import geb.Page
-import me.double.module.GoogleSearchModule
+import me.pdouble.module.GoogleSearchModule
 
 class GoogleHomePage extends Page {
 
