@@ -155,13 +155,14 @@ def grailsFunctionalTest(def browserSpec) {
 }
 
 def browsers = [
-    [ browserName: 'chrome',            platform: 'Windows 7',   version:  '36' ],
-    [ browserName: 'firefox',           platform: 'Windows 7',   version:  '31' ],
-    [ browserName: 'internet explorer', platform: 'Windows 7',   version:   '8' ],
-    [ browserName: 'internet explorer', platform: 'Windows 7',   version:   '9' ],
-    [ browserName: 'internet explorer', platform: 'Windows 7',   version:  '10' ],
-    [ browserName: 'internet explorer', platform: 'Windows 8.1', version:  '11' ]
+    [ browserName: 'chrome',            platform: 'Windows 7',   version:  '36' ]
 ]
+
+//    [ browserName: 'firefox',           platform: 'Windows 7',   version:  '31' ],
+//    [ browserName: 'internet explorer', platform: 'Windows 7',   version:   '8' ],
+//    [ browserName: 'internet explorer', platform: 'Windows 7',   version:   '9' ],
+//    [ browserName: 'internet explorer', platform: 'Windows 7',   version:  '10' ],
+//    [ browserName: 'internet explorer', platform: 'Windows 8.1', version:  '11' ]
 
 browsers.each { browserSpec ->
   grailsFunctionalTest(browserSpec)
