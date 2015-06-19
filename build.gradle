@@ -108,8 +108,10 @@ sauceLabs {
   account {
 //    username = System.getenv("SAUCE_LABS_USER")
 //    accessKey = System.getenv("SAUCE_LABS_ACCESS_PASSWORD")
- username = "horii03"
- accessKey = "1dff5a82-1c94-4bec-bbe9-f37b0cb3ffa8"
+// username = "horii03"
+// accessKey = "1dff5a82-1c94-4bec-bbe9-f37b0cb3ffa8"
+username = "horii003"
+accessKey = "8c776e28-c33e-4bbb-a505-f529672f3cfa"
   }
   connect {
     port = 4445
