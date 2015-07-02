@@ -13,10 +13,10 @@ buildscript {
 
 project.buildDir = 'target'
 project.version = '0.1'
-description = "Example project for automated Grails testing with Sauce Labs"
+description = "Example project for automated Grails testing with BrowserStack"
 
 apply plugin: "project-report"
-apply plugin: "geb-saucelabs"
+apply plugin: "geb-browserstack"
 apply plugin: "grails"
 apply plugin: "idea"
 
@@ -29,110 +29,30 @@ grails {
 def gebVersion = "0.10.0"
 def seleniumVersion = "2.42.2"
 
-/** Get hostname appropriate for the Sauce Connect tunnel. */
-def getHostname() {
-  def myhostname = "hostname".execute().text.trim()
-  // .local is not available from the tunnel
-  if (myhostname && !myhostname.endsWith(".local")) {
-    return myhostname
-  }
-
-  // check /etc/hosts for localhost alias
-  myhostname = "localhost"
-  file("/etc/hosts").eachLine { line ->
-    def tokens = line.split(/\s+/)
-    if (tokens[0] == "127.0.0.1") {
-      for(int i = 1; i < tokens.length; i++) {
-        if (!tokens[i].contains("localhost")) {
-          myhostname = tokens[i]
-        }
-      }
+browserStack {
+    application 'http://www.google.com/' //3
+    browsers { //4
+       firefox_mac_19
+       chrome_mac
+       delegate."internet explorer_windows_9"
+       nexus4 { //5
+         capabilities browserName: "android", platform: "ANDROID", device: "Google Nexus 4"
+       }
     }
-  }
-
-  // fallback to localhost
-  return myhostname
-}
-
-ext {
-  hostname = getHostname()
-}
-
-repositories {
-  mavenCentral()
-  grails.central()
-  maven { url "http://repository-saucelabs.forge.cloudbees.com/release" }
-}
-
-dependencies {
-  sauceConnect("com.saucelabs:ci-sauce:1.84") {
-    exclude module: 'sebuilder-interpreter'
-  }
-  // This is marked as provided in the pom for some reason
-  sauceConnect "commons-io:commons-io:1.4"
-
-  test "org.grails:grails-datastore-test-support:1.0-grails-2.4"
-  test "org.gebish:geb-spock:$gebVersion"
-  test "org.seleniumhq.selenium:selenium-support:$seleniumVersion"
-  test "org.seleniumhq.selenium:selenium-firefox-driver:$seleniumVersion"
-  test "org.seleniumhq.selenium:selenium-chrome-driver:$seleniumVersion"
-  test "org.seleniumhq.selenium:selenium-ie-driver:$seleniumVersion"
-  test( "com.github.detro:phantomjsdriver:1.2.0" ) {
-    transitive = false
-  }
-
-  // plugins for the build system only
-  bootstrap "org.grails.plugins:tomcat:7.0.55"
-
-  // plugins for the compile step
-  compile "org.grails.plugins:scaffolding:2.1.2"
-  compile 'org.grails.plugins:cache:1.1.7'
-  compile "org.grails.plugins:asset-pipeline:1.9.9"
-
-  // plugins needed at runtime but not for compilation
-  runtime("org.grails.plugins:hibernate4:4.3.5.5") { // or ":hibernate:3.6.10.17"
-    exclude module: 'xml-apis'
-  }
-  runtime "org.grails.plugins:database-migration:1.4.0"
-  runtime "org.grails.plugins:jquery:1.11.1"
-
-  test "org.grails.plugins:geb:$gebVersion"
-  test "org.grails.plugins:geb-saucelabs:0.1"
-  test("org.grails.plugins:code-coverage:2.0.3-2") {
-    exclude module: 'xml-apis'
-    exclude group: 'xerces'
-  }
-}
-
-sauceLabs {
-  account {
-//    username = System.getenv("SAUCE_LABS_USER")
-//    accessKey = System.getenv("SAUCE_LABS_ACCESS_PASSWORD")
- username = "horii03"
- accessKey = "1dff5a82-1c94-4bec-bbe9-f37b0cb3ffa8"
-//username = "horii003"
-//accessKey = "8c776e28-c33e-4bbb-a505-f529672f3cfa"
-  }
-  connect {
-    port = 4445
-    if (project.hostname != "localhost") {
-      additionalOptions << '-t' << project.hostname
+    task { //6
+       testClassesDir = test.testClassesDir
+       testSrcDirs = test.testSrcDirs
+       classpath = test.classpath
     }
-  }
+    account { //7
+       username = "osahorii1"
+       accessKey = "vUSTRxfRvv8z9dt7gqmE"
+    }
 }
 
 task functionalTests {
-  group "Sauce Test"
+  group "BrowserStack Test"
 }
-
-/**
- * Create a new Grails functional test for the specified browser.
- * @param browserSpec map of properties sent to Sauce Labs
- */
-
-//ext {
-//  grailsFunctionalServerPort = 8080
-//}
 
 def grailsFunctionalTest(def browserSpec) {
 
@@ -141,24 +61,20 @@ def grailsFunctionalTest(def browserSpec) {
   def output = "target/test-reports/geb/${name}"
 
   task "grailsFuncTest_${name}"(type: GrailsTestTask) {
-    group "Sauce Test"
+    group "BrowserStack Test"
 
     testResultsDir = file(output)
     phases = ['functional:']
     jvmOptions.with {
-//      systemProperty "grails.nofork", "true"
-      systemProperty "geb.saucelabs.browser", browser
-      systemProperty "geb.build.reportsDir", output
-//      systemProperty "grails.server.port", grailsFunctionalServerPort
-//      systemProperty "server.port", grailsFunctionalServerPort
-//      systemProperty "grails.server.host", hostname
+//      systemProperty "geb.saucelabs.browser", browser
+//      systemProperty "geb.build.reportsDir", output
     }
     
     dependsOn 'openSauceTunnelInBackground'
     finalizedBy 'closeSauceTunnel'
   }
   functionalTests.dependsOn "grailsFuncTest_${name}"
-//  grailsFunctionalServerPort++
+
 }
 
 def browsers = [
