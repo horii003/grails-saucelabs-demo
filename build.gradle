@@ -162,7 +162,7 @@ def grailsFunctionalTest(def browserSpec) {
 }
 
 def browsers = [
-    [ browserName: 'internet explorer', platform: 'Windows 10', version:  '20.10240' ]
+    [ browserName: 'edge', platform: 'Windows 10', version:  '20.10240' ]
 ]
 
 //    [ browserName: 'chrome',            platform: 'Windows 7',   version:  '36' ],
