@@ -55,8 +55,12 @@ def sauceDriver = { def browserCaps ->
     }
 }
 
+def sauceBrowser = System.getProperty("geb.sauce.browser")
+System.err.println("${sauceBrowser}") //null here. SauceLabs plugin does not set sauceBrower with 'gradle test' & 'gradle grails-test-app' command?
+
 // This property comes from the gradle geb-saucelabs plugin
 def sauceLabsBrowser = System.getProperty("geb.saucelabs.browser")
+
 if (sauceLabsBrowser) {
   def browserCaps = new Properties()
   browserCaps.load(new StringReader(sauceLabsBrowser.replaceAll(',','\n')))
