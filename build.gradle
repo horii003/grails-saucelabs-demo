@@ -22,7 +22,7 @@ apply plugin: "idea"
 
 grails {
   grailsVersion = '2.4.4'
-  groovyVersion = '2.3.6'
+  groovyVersion = '2.4.1'
   springLoadedVersion = '1.2.1.RELEASE'
 }
 
