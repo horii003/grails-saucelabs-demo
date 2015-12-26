@@ -27,7 +27,7 @@ grails {
 }
 
 def gebVersion = "0.10.0"
-def seleniumVersion = "2.42.2"
+def seleniumVersion = "2.48.2"
 
 /** Get hostname appropriate for the Sauce Connect tunnel. */
 def getHostname() {
